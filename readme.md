@@ -84,7 +84,7 @@ docker run -d\
  	
 
 5. Sample query to get patient gender, dob, race, ethnicity. Query can run via CLI or API
-	```sql
+```sql
 select id
 	, gender
 	, birthDate
@@ -106,10 +106,10 @@ select id
 ;
 
 	
-	```
+```
 
-	sample query to get observation code
-	```sql
+sample query to get observation code
+```sql
 SELECT contents -> 'subject' -> 'reference' as id 
 	, coding_arr -> 'code' as code
 	, (modextext ->> 'valueDate')::timestamptz end as notes_date
@@ -123,8 +123,8 @@ where contents->> 'resourceType' = 'Observation'
 	-- and coding_arr ->> 'system' = 'custom' 
 	-- and coding_arr ->> 'code' = '33962009'
 limit 10;
-	```
-	UMLS use cui code "a0_72" for covid-19
+```
+UMLS use cui code "a0_72" for covid-19
 
 
 
