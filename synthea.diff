@@ -1,0 +1,22 @@
+diff --git a/src/main/resources/synthea.properties b/src/main/resources/synthea.properties
+index 657dd455..da53d8fc 100644
+--- a/src/main/resources/synthea.properties
++++ b/src/main/resources/synthea.properties
+@@ -17,7 +17,7 @@ exporter.fhir_dstu2.export = false
+ exporter.fhir.use_shr_extensions = false
+ exporter.fhir.use_us_core_ig = true
+ exporter.fhir.transaction_bundle = true
+-exporter.fhir.bulk_data = false
++exporter.fhir.bulk_data = true
+ exporter.groups.fhir.export = false
+ exporter.hospital.fhir.export = true
+ exporter.hospital.fhir_stu3.export = false
+@@ -47,7 +47,7 @@ exporter.cpcds.single_payer = false
+ exporter.cdw.export = false
+ exporter.text.export = false
+ exporter.text.per_encounter_export = false
+-exporter.clinical_note.export = false
++exporter.clinical_note.export = true
+ 
+ # parameters for symptoms export
+ exporter.symptoms.csv.export = false

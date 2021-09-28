@@ -4,24 +4,27 @@
 	- Clone synthea repo, and follow the quick start guide
 		```bash
 		git clone https://github.com/synthetichealth/synthea.git
+		mv synthea.diff synthea/
 		cd synthea
+		git checkout a3482c856d30410e438047845796095a827cca41
 		./gradlew build check test
 		```
-	- Update the setting in `./synthea/src/main/resources/synthea.properties` to create bulk data and clinical notes 
+	- Apply the patch to update the settings in `./synthea/src/main/resources/synthea.properties` to allow for creating bulk data and clinical notes 
+		```bash
+		git apply synthea.diff
 		```
-		exporter.fhir.bulk_data = true
-		exporter.clinical_note.export = true
-		```
+		
 	- run synthea to create patient data
-		`./run_synthea -p 10` or `./run_synthea -p 10 -m covid19`
+		`./run_synthea -p 10` or `./run_synthea -p 10 -m covid19` (for covid-19-related fake data)
 
 2. Prepare cTAKES server
 	- option 1, use demo server {IP}. The server is available between {date1} and {date2} for AMIA demo use only
 	- option 2, install you own server in localhost (require ~4G memory and ~12G storage). 
 		Register at UMLS (https://www.nlm.nih.gov/research/umls/index.html). Obtain API key after registration.
 		```bash
-		git clone https://github.com/Machine-Learning-for-Medical-Language/ctakes-rest-package   # Private repo ?
-		cd ctakes-rest-package
+		cd <amia demo directory>
+		git clone https://github.com/Machine-Learning-for-Medical-Language/ctakes-covid-container   # Private repo ?
+		cd ctakes-covid-container
 		docker build -t ctakes-covid .
 		export umls_api_key={UMLS-api-key}
 		./start_rest.sh
@@ -29,25 +32,28 @@
 		Confirm the server is running by check localhost:8080 for Tomcat.
 		check container logs if localhost:8080 is not accessible:
 			i. "umls user valided" message should appear in the logs
-			ii. the container takes a while to start, the last message should be similar to ""
+			ii. the container takes a while to start, the last message should be similar to "org.apache.catalina.startup.Catalina.start Server startup in [16,375] milliseconds"
 
 
 3. NLP process
-	This process read in clinical notes from ./synthes/output/notes/\*.txt files, send to cTAKES server. The result is converted in to FHIR R4 resources.
+	This process read in clinical notes from ./synthea/output/notes/\*.txt files, send to cTAKES server. The result is converted in to FHIR R4 resources.
 	Current version support medical terms in 4 categories, with one-to-one FHIR resource mapping 
   		DiseaseDisorderMention => Condition
   		SignSymptomMention => Observation
   		MedicationMention => MedicationStatement
   		ProcedureMention => Procedure
   	```bash
+	cd <amia demo directory>
   	git clone https://github.com/bmao1/NLP_to_FHIR
   	cd NLP_to_FHIR
-  	python extract_cuis_edits.py {input_folder} {output_folder}
+	mkdir -p output/fhir
+  	python extract_cuis_edits.py ../synthea/output/notes/ output/fhir
   	```
 
 4. Loading processed structured data into analytics database (postgres)
 	- Start postgres container. DB data will be stored in ./data subdirectory; Input data should be placed in ./input subdirectory (Edit volumne mapping as needed)
 ```bash
+cd <amia demo directory>
 docker run -d\
     -p 5432:5432 \
     --name postgres13 \
