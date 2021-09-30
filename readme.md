@@ -45,8 +45,9 @@
   	```bash
 	cd <amia demo directory>
   	git clone https://github.com/bmao1/NLP_to_FHIR
+	mkdir -p NLP_to_FHIR/output/fhir
+	cp synthea/output/fhir/* NLP_to_FHIR/output/fhir/
   	cd NLP_to_FHIR
-	mkdir -p output/fhir
   	python extract_cuis_edits.py ../synthea/output/notes/ output/fhir
   	```
 
@@ -54,6 +55,7 @@
 	- Start postgres container. DB data will be stored in ./data subdirectory; Input data should be placed in ./input subdirectory (Edit volumne mapping as needed)
 ```bash
 cd <amia demo directory>
+mkdir db_data
 docker run -d\
     -p 5432:5432 \
     --name postgres13 \
@@ -62,8 +64,8 @@ docker run -d\
     -e POSTGRES_DB=amia \
     -e POSTGRES_HOST=postgres \
     -e PGDATA=/var/lib/postgresql/data/pgdata \
-    -v `pwd`/data:/var/lib/postgresql/data \
-    -v `pwd`/input:/var/lib/postgresql/input \
+    -v `pwd`/db_data:/var/lib/postgresql/data \
+    -v `pwd`/NLP_to_FHIR/output/fhir:/var/lib/postgresql/input \
     postgres:13
 ```
 
@@ -81,8 +83,11 @@ docker run -d\
 		CREATE TABLE IF NOT EXISTS demo (contents jsonb);
 		
 		# Load ndjson file 
-		\copy demo from '/var/lib/postgresql/input/Patient.ndjson'
-		\copy demo from '/var/lib/postgresql/input/Observation.ndjson'
+		\copy demo from program 'sed -e ''s/\\/\\\\/g'' /var/lib/postgresql/input/Patient.ndjson'
+		\copy demo from program 'sed -e ''s/\\/\\\\/g'' /var/lib/postgresql/input/Condition.ndjson'
+		\copy demo from program 'sed -e ''s/\\/\\\\/g'' /var/lib/postgresql/input/Procedure.ndjson'
+		\copy demo from program 'sed -e ''s/\\/\\\\/g'' /var/lib/postgresql/input/MedicationStatement.ndjson'
+		\copy demo from program 'sed -e ''s/\\/\\\\/g'' /var/lib/postgresql/input/Observation.ndjson'
 		```
 		Option 2, run python demo_load.py, using default ./input location, psycopg2 is required `pip install psycopg2`
 			***Code in testing, not finalized yet***
@@ -118,7 +123,7 @@ sample query to get observation code
 ```sql
 SELECT contents -> 'subject' -> 'reference' as id 
 	, coding_arr -> 'code' as code
-	, (modextext ->> 'valueDate')::timestamptz end as notes_date
+	, (modextext ->> 'valueDate')::timestamptz as notes_date
 FROM demo
 	, jsonb_array_elements(contents -> 'code' -> 'coding')  coding_arr
 	, jsonb_array_elements(contents -> 'modifierExtension')  modext
