@@ -53,21 +53,21 @@
 
 4. Loading processed structured data into analytics database (postgres)
 	- Start postgres container. DB data will be stored in ./data subdirectory; Input data should be placed in ./input subdirectory (Edit volumne mapping as needed)
-```bash
-cd <amia demo directory>
-mkdir db_data
-docker run -d\
-    -p 5432:5432 \
-    --name postgres13 \
-    -e POSTGRES_USER=postgres \
-    -e POSTGRES_PASSWORD=example \
-    -e POSTGRES_DB=amia \
-    -e POSTGRES_HOST=postgres \
-    -e PGDATA=/var/lib/postgresql/data/pgdata \
-    -v `pwd`/db_data:/var/lib/postgresql/data \
-    -v `pwd`/NLP_to_FHIR/output/fhir:/var/lib/postgresql/input \
-    postgres:13
-```
+	```bash
+	cd <amia demo directory>
+	mkdir db_data
+	docker run -d\
+	    -p 5432:5432 \
+	    --name postgres13 \
+	    -e POSTGRES_USER=postgres \
+	    -e POSTGRES_PASSWORD=example \
+	    -e POSTGRES_DB=amia \
+	    -e POSTGRES_HOST=postgres \
+	    -e PGDATA=/var/lib/postgresql/data/pgdata \
+	    -v `pwd`/db_data:/var/lib/postgresql/data \
+	    -v `pwd`/NLP_to_FHIR/output/fhir:/var/lib/postgresql/input \
+	    postgres:13
+	```
 
 	- Using the following command to load data. For demo purpose, all FHIR resources are loaded into one table
 		Known issue
