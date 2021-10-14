@@ -3,6 +3,7 @@
 1. Input data prep
 	- Clone synthea repo, and follow the quick start guide
 		```bash
+		cd <amia demo directory>
 		git clone https://github.com/synthetichealth/synthea.git
 		mv synthea.diff synthea/
 		cd synthea
