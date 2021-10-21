@@ -49,7 +49,7 @@
 	mkdir -p NLP_to_FHIR/output/fhir
 	cp synthea/output/fhir/* NLP_to_FHIR/output/fhir/
   	cd NLP_to_FHIR
-  	python extract_cuis_edits.py ../synthea/output/notes/ output/fhir
+  	python extract_cuis_edits.py ../synthea/output/notes/ output/fhir true
   	```
 
 4. Loading processed structured data into analytics database (postgres)
