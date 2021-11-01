@@ -59,7 +59,7 @@
 	```bash
 	cd <amia demo directory>
 	mkdir db_data
-	docker run -d\
+	docker run -d \
 		-p 5432:5432 \
 		--name postgres13 \
 		-e POSTGRES_USER=postgres \
