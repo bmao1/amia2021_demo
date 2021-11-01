@@ -20,7 +20,7 @@
 
 2. Prepare cTAKES server
 	- option 1, use demo server {server ip: 3.142.162.98:4000 , try 3.142.162.98:8080 if your firewall blocked the default server}. 
-		The server is available Nov 1-3, 2021 for AMIA demo use only. This host:port should replace the localhost:8080 in the url variable in the file ctakes_rest.py (line 75).
+		The server is available Nov 1-3, 2021 for AMIA demo use only. This host:port should replace the localhost:8080 in the url variable in the file ctakes_rest.py (line 75) in the NLP_to_FHIR repo (step 3).
 	- option 2, install you own server in localhost (require ~4G memory and ~12G storage). 
 		Register at UMLS (https://www.nlm.nih.gov/research/umls/index.html). Obtain API key after registration.
 		```bash
@@ -50,6 +50,7 @@
 	mkdir -p NLP_to_FHIR/output/fhir
 	cp synthea/output/fhir/* NLP_to_FHIR/output/fhir/
   	cd NLP_to_FHIR
+	<if using the AMIA demo server, edit the file ctakes_rest.py here with the demo server host:port>
   	python extract_cuis_edits.py ../synthea/output/notes/ output/fhir true
   	```
 
