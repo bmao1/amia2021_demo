@@ -25,7 +25,7 @@
 		Register at UMLS (https://www.nlm.nih.gov/research/umls/index.html). Obtain API key after registration.
 		```bash
 		cd <amia demo directory>
-		git clone https://github.com/Machine-Learning-for-Medical-Language/ctakes-covid-container   # Private repo ?
+		git clone https://github.com/Machine-Learning-for-Medical-Language/ctakes-covid-container
 		cd ctakes-covid-container
 		docker build -t ctakes-covid .
 		export umls_api_key={UMLS-api-key}
