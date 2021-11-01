@@ -19,7 +19,8 @@
 		`./run_synthea -p 1000` or `./run_synthea -p 1000 -m covid19` (for covid-19-related fake data)
 
 2. Prepare cTAKES server
-	- option 1, use demo server {IP}. The server is available between {date1} and {date2} for AMIA demo use only
+	- option 1, use demo server {server ip: 3.142.162.98:4000 , try 3.142.162.98:8080 if your firewall blocked the default server}. 
+		The server is available Nov 1-3, 2021 for AMIA demo use only.
 	- option 2, install you own server in localhost (require ~4G memory and ~12G storage). 
 		Register at UMLS (https://www.nlm.nih.gov/research/umls/index.html). Obtain API key after registration.
 		```bash
