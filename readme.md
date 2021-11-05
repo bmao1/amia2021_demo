@@ -98,8 +98,8 @@
 select id
 	, gender
 	, birthDate
-	, max(race)
-	, max(ethnicity)
+	, max(race) as race
+	, max(ethnicity) as ethnicity
 	from (
 		select contents -> 'id' as id
 			, contents -> 'gender' as gender
